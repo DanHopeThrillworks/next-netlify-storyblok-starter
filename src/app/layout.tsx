@@ -33,7 +33,7 @@ export default function RootLayout({
         {children}
         <Script
           src="https://cdn.weglot.com/weglot.min.js"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
           onReady={() => {
             const apiKey = weglotApiKey;
             if (!apiKey) {
