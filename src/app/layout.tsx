@@ -26,36 +26,36 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Script
-        src="https://cdn.weglot.com/weglot.min.js"
-        strategy="beforeInteractive"
-        onLoad={() => {
-          const apiKey = weglotApiKey;
-          if (!apiKey) {
-            console.warn(
-              "Weglot: NEXT_PUBLIC_WEGLOT_API_KEY is missing. Set it in your .env.local"
-            );
-            return;
-          }
-          const wg = (globalThis as { Weglot?: WeglotGlobal }).Weglot;
-          if (!wg || typeof wg.initialize !== "function") {
-            console.error(
-              "Weglot: global not available after script load; initialization skipped"
-            );
-            return;
-          }
-          try {
-            wg.initialize({ api_key: apiKey });
-          } catch (err) {
-            console.error("Weglot: initialization failed", err);
-          }
-        }}
-      />
+    <html>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <Script
+          src="https://cdn.weglot.com/weglot.min.js"
+          strategy="beforeInteractive"
+          onReady={() => {
+            const apiKey = weglotApiKey;
+            if (!apiKey) {
+              console.warn(
+                "Weglot: NEXT_PUBLIC_WEGLOT_API_KEY is missing. Set it in your .env.local"
+              );
+              return;
+            }
+            const wg = (globalThis as { Weglot?: WeglotGlobal }).Weglot;
+            if (!wg || typeof wg.initialize !== "function") {
+              console.error(
+                "Weglot: global not available after script load; initialization skipped"
+              );
+              return;
+            }
+            try {
+              wg.initialize({ api_key: apiKey });
+            } catch (err) {
+              console.error("Weglot: initialization failed", err);
+            }
+          }}
+        />
       </body>
     </html>
   );
