@@ -1,14 +1,5 @@
-"use client";
-
-import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const weglotApiKey = process.env.NEXT_PUBLIC_WEGLOT_API_KEY;
-
-type WeglotGlobal = {
-  initialize: (config: { api_key: string }) => void;
-};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,31 +22,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <Script
-          src="https://cdn.weglot.com/weglot.min.js"
-          strategy="afterInteractive"
-          onReady={() => {
-            const apiKey = weglotApiKey;
-            if (!apiKey) {
-              console.warn(
-                "Weglot: NEXT_PUBLIC_WEGLOT_API_KEY is missing. Set it in your .env.local"
-              );
-              return;
-            }
-            const wg = (globalThis as { Weglot?: WeglotGlobal }).Weglot;
-            if (!wg || typeof wg.initialize !== "function") {
-              console.error(
-                "Weglot: global not available after script load; initialization skipped"
-              );
-              return;
-            }
-            try {
-              wg.initialize({ api_key: apiKey });
-            } catch (err) {
-              console.error("Weglot: initialization failed", err);
-            }
-          }}
-        />
       </body>
     </html>
   );
